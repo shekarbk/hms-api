@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spring.api.hms.constants.HmsConstants;
 import com.spring.api.hms.enums.RoleEnum;
 import com.spring.api.hms.model.Registration;
 import com.spring.api.hms.service.impl.RegistrationServiceImpl;
@@ -25,7 +26,7 @@ public class RegistrationController {
 	@PostMapping("/registration")
 	public String saveRegistrationDetails(@RequestBody Registration registration) {
 		registrationService.saveRegistrationDetails(registration);
-		return "user details saved successfully !!!";
+		return HmsConstants.SUCCESS_MESSAGE;
 	}
 
 	@GetMapping("/registration/email/{email}")

@@ -13,7 +13,7 @@ public class BookingDetails {
 	private String doctorName;
 	private String treatmentType;
 	private String purpose;
-	private String profileId;
+	private int profileId;
 	private String patientName;
 	private boolean isTreatmentCompleted;
 	private String prescription;
