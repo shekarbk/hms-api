@@ -8,5 +8,4 @@ import com.spring.api.hms.entity.UserDetailsEntity;
 @Repository
 public interface UserDetailsRepository extends JpaRepository<UserDetailsEntity, Integer> {
 
-
 }

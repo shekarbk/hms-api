@@ -28,7 +28,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 		UserDetailsEntity userDtls = new UserDetailsEntity(registration.getFirstName(), registration.getLastName(),
 				registration.getGender(), registration.getAge(), registration.getAddress(),
-				registration.getExistingDiseases());
+				registration.getExistingDiseases(), registration.getQualification(), registration.getSpecialization(),
+				registration.getYearOfExp());
 
 		RoleDetailsEntity roleDtls = new RoleDetailsEntity(registration.getEmail(), registration.getPassword(),
 				registration.getRole());
@@ -75,9 +76,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 	public void updateRegistrationDetails(Registration registration) {
 
 		Optional<UserDetailsEntity> userDtlsObject = userDetailsRepository.findById(registration.getRegistrationId());
-		if(userDtlsObject.isPresent()) {
+		if (userDtlsObject.isPresent()) {
 			UserDetailsEntity userDtls = userDtlsObject.get();
-			
+
 			userDtls.setAddress(registration.getAddress());
 			RoleDetailsEntity roleDtlsEntity = userDtls.getRoleDetails();
 			roleDtlsEntity.setPassword(registration.getPassword());

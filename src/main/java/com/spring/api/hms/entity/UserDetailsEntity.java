@@ -1,12 +1,17 @@
 package com.spring.api.hms.entity;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -14,13 +19,12 @@ import com.spring.api.hms.enums.GenderEnum;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
-//@NoArgsConstructor(force = true)
+@NoArgsConstructor(force = true)
 //@RequiredArgsConstructor
 @Table(name = "USER_DETAILS")
 public class UserDetailsEntity {
@@ -36,17 +40,22 @@ public class UserDetailsEntity {
 	private int age;
 	private String address;
 	private String existingDiseases;
-	@OneToOne(mappedBy = "userDetails") // userDetails is a variable name present in RoleDetails class
+	private String qualification;
+	private String specialization;
+	private String yearOfExp;
+
+	@OneToOne(mappedBy = "userDetails") // userDetails is a variable name present in RoleDetailsEntity class
 	private RoleDetailsEntity roleDetails;
-	@OneToOne(mappedBy = "userDetails") // userDetails is a variable name present in BookingDetails class
-	private BookingDetailsEntity bookingDetails;
-
-	public UserDetailsEntity() {
-
-	}
+	
+	@OneToMany(mappedBy = "patientId", fetch = FetchType.LAZY, cascade = CascadeType.ALL) //patientId is the variable name present in BookingDetailsEntity class
+	private Set<BookingDetailsEntity> patientId;
+	
+	@OneToMany(mappedBy = "doctorId", fetch = FetchType.LAZY, cascade = CascadeType.ALL) //doctorId is the variable name present in BookingDetailsEntity class
+	private Set<BookingDetailsEntity> doctorId;
+	
 
 	public UserDetailsEntity(String firstName, String lastName, GenderEnum sex, int age, String address,
-			String existingDiseases) {
+			String existingDiseases, String qualification, String specialization, String yearOfExp) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -54,5 +63,8 @@ public class UserDetailsEntity {
 		this.age = age;
 		this.address = address;
 		this.existingDiseases = existingDiseases;
+		this.qualification = qualification;
+		this.specialization = specialization;
+		this.yearOfExp = yearOfExp;
 	}
 }

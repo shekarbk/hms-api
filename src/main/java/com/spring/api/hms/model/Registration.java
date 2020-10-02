@@ -19,5 +19,8 @@ public class Registration {
 	private String existingDiseases;
 	private String email;
 	private String password;
+	private String qualification;
+	private String specialization;
+	private String yearOfExp;
 	private RoleEnum role;
 }

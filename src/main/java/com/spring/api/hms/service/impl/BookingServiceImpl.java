@@ -30,15 +30,15 @@ public class BookingServiceImpl implements BookingService {
 
 	@Override
 	public void createNewBooking(BookingDetails bookingDetails) {
-		Optional<UserDetailsEntity> userDetails = userDetailsRepository.findById(bookingDetails.getProfileId());
-		if (userDetails.isPresent()) {
-			BookingDetailsEntity bookingEnty = new BookingDetailsEntity(bookingDetails.getBookedDate(),
-					bookingDetails.getBookedTime(), bookingDetails.getDoctorName(), bookingDetails.getTreatmentType(),
-					bookingDetails.getPurpose(), bookingDetails.getProfileId(),
-					bookingDetails.isTreatmentCompleted(), bookingDetails.getPrescription(), userDetails.get());
-			bookingDtlsRepository.save(bookingEnty);
-		}
 
+		Optional<UserDetailsEntity> patientObj = userDetailsRepository.findById(bookingDetails.getPatientId());
+		Optional<UserDetailsEntity> doctorObj = userDetailsRepository.findById(bookingDetails.getDoctorId());
+
+		BookingDetailsEntity bookingEnty = new BookingDetailsEntity(bookingDetails.getBookedDate(),
+				bookingDetails.getBookedTime(), bookingDetails.getTreatmentType(), bookingDetails.getPurpose(),
+				bookingDetails.getIsTreatmentCompleted(), bookingDetails.getPrescription(), patientObj.get(),
+				doctorObj.get());
+		bookingDtlsRepository.save(bookingEnty);
 	}
 
 	@Override
@@ -49,8 +49,21 @@ public class BookingServiceImpl implements BookingService {
 
 	@Override
 	public BookingDetails getBookingSummaryDetails(int bookingId) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<BookingDetailsEntity> bookingEnty = bookingDtlsRepository.findById(bookingId);
+		BookingDetails bookingVO = new BookingDetails();
+		if (bookingEnty.isPresent()) {
+			BookingDetailsEntity entity = bookingEnty.get();
+			bookingVO.setBookingId(entity.getBookingId());
+			bookingVO.setBookedDate(entity.getBookedDate());
+			bookingVO.setBookedTime(entity.getBookedTime());
+			bookingVO.setDoctorName(entity.getDoctorId().getFirstName() + " " + entity.getDoctorId().getLastName());
+			bookingVO.setTreatmentType(entity.getTreatmentType());
+			bookingVO.setPurpose(entity.getPurpose());
+			bookingVO.setPatientName(entity.getPatientId().getFirstName() + " " + entity.getPatientId().getLastName());
+			bookingVO.setIsTreatmentCompleted(entity.getIsTreatmentCompleted());
+			bookingVO.setPrescription(entity.getPrescription());
+		}
+		return bookingVO;
 	}
 
 	@Override
