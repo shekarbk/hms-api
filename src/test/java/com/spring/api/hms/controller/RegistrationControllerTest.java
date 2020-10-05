@@ -56,7 +56,7 @@ public class RegistrationControllerTest {
 		this.mockMvc
 				.perform(post("/v1/hms/registration").contentType(MediaType.APPLICATION_JSON)
 						.content(objectMapper.writeValueAsString(registrationDtls)))
-				.andExpect(status().is(200)).andExpect(content().string("user details saved successfully !!!"));
+				.andExpect(status().is(200)).andExpect(content().string("details saved successfully !!!"));
 
 		Mockito.verify(registrationServiceMock).saveRegistrationDetails(Mockito.any(Registration.class));
 
@@ -101,7 +101,7 @@ public class RegistrationControllerTest {
 		this.mockMvc
 		.perform(put("/v1/hms/registration").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(registrationDtls)))
-		.andExpect(status().is(200)).andExpect(content().string("user details updated successfully !!!"));
+		.andExpect(status().is(200)).andExpect(content().string("details updated successfully !!!"));
 
 		Mockito.verify(registrationServiceMock).updateRegistrationDetails(Mockito.any(Registration.class));
 

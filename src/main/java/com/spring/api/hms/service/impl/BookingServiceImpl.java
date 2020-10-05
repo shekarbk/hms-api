@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.spring.api.hms.constants.HmsConstants;
 import com.spring.api.hms.entity.BookingDetailsEntity;
 import com.spring.api.hms.entity.UserDetailsEntity;
+import com.spring.api.hms.exception.NoRecordFoundException;
 import com.spring.api.hms.model.BookingDetails;
 import com.spring.api.hms.repository.BookingDetailsRepository;
 import com.spring.api.hms.repository.UserDetailsRepository;
@@ -42,9 +45,17 @@ public class BookingServiceImpl implements BookingService {
 	}
 
 	@Override
-	public String deleteBooking(int bookingId) {
-		// TODO Auto-generated method stub
-		return null;
+	public String deleteBooking(int bookingId) throws NoRecordFoundException {
+		if (bookingId != 0) {
+			try {
+				bookingDtlsRepository.deleteById(bookingId);
+			} catch (EmptyResultDataAccessException e) {
+				throw new NoRecordFoundException("booking id not found !!!");
+			}
+		} else {
+			throw new NoRecordFoundException("booking id not found !!!");
+		}
+		return HmsConstants.DELETE_MESSAGE;
 	}
 
 	@Override
@@ -53,12 +64,17 @@ public class BookingServiceImpl implements BookingService {
 		BookingDetails bookingVO = new BookingDetails();
 		if (bookingEnty.isPresent()) {
 			BookingDetailsEntity entity = bookingEnty.get();
+			UserDetailsEntity patientEntity = entity.getPatientId();
+			UserDetailsEntity doctorEntity = entity.getDoctorId();
+
 			bookingVO.setBookingId(entity.getBookingId());
 			bookingVO.setBookedDate(entity.getBookedDate());
 			bookingVO.setBookedTime(entity.getBookedTime());
+			bookingVO.setDoctorId(doctorEntity.getUserId());
 			bookingVO.setDoctorName(entity.getDoctorId().getFirstName() + " " + entity.getDoctorId().getLastName());
 			bookingVO.setTreatmentType(entity.getTreatmentType());
 			bookingVO.setPurpose(entity.getPurpose());
+			bookingVO.setPatientId(patientEntity.getUserId());
 			bookingVO.setPatientName(entity.getPatientId().getFirstName() + " " + entity.getPatientId().getLastName());
 			bookingVO.setIsTreatmentCompleted(entity.getIsTreatmentCompleted());
 			bookingVO.setPrescription(entity.getPrescription());
@@ -67,8 +83,28 @@ public class BookingServiceImpl implements BookingService {
 	}
 
 	@Override
-	public void updateBookingDetails(BookingDetails bookingDetails) {
-		// TODO Auto-generated method stub
+	public void updateBookingDetails(BookingDetails bookingDetails) throws NoRecordFoundException {
+		Optional<UserDetailsEntity> patientObj = userDetailsRepository.findById(bookingDetails.getPatientId());
+		Optional<UserDetailsEntity> doctorObj = userDetailsRepository.findById(bookingDetails.getDoctorId());
+
+		if (!patientObj.isPresent() || !doctorObj.isPresent()) {
+			throw new NoRecordFoundException("either patient id or doctor id not found !!!");
+		}
+
+		Optional<BookingDetailsEntity> bookingEnty = bookingDtlsRepository.findById(bookingDetails.getBookingId());
+		if (bookingEnty.isPresent()) {
+			BookingDetailsEntity entity = bookingEnty.get();
+			entity.setBookedDate(bookingDetails.getBookedDate());
+			entity.setBookedTime(bookingDetails.getBookedTime());
+			entity.setDoctorId(doctorObj.get());
+			entity.setTreatmentType(bookingDetails.getTreatmentType());
+			entity.setPurpose(bookingDetails.getPurpose());
+			entity.setPatientId(patientObj.get());
+			entity.setIsTreatmentCompleted(bookingDetails.getIsTreatmentCompleted());
+			entity.setPrescription(bookingDetails.getPrescription());
+
+			bookingDtlsRepository.save(entity);
+		}
 
 	}
 

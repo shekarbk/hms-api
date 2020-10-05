@@ -45,7 +45,6 @@ public class RegistrationController {
 	@PutMapping("/registration")
 	public String UpdateRegistrationDetails(@RequestBody Registration registration) {
 		registrationService.updateRegistrationDetails(registration);
-		return "user details updated successfully !!!";
-		
+		return HmsConstants.UPDATE_MESSAGE;
 	}
 }
