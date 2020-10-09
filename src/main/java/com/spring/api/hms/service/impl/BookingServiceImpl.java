@@ -1,5 +1,6 @@
 package com.spring.api.hms.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,9 +27,32 @@ public class BookingServiceImpl implements BookingService {
 	BookingDetailsRepository bookingDtlsRepository;
 
 	@Override
-	public List<BookingDetails> getBookingDetails(String userId, String bookingDate) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<BookingDetails> getBookingDetailsByIdAndDate(int doctorId, String bookingDate) {
+		
+		UserDetailsEntity userEntity = new UserDetailsEntity();
+		userEntity.setUserId(doctorId);
+		List<BookingDetailsEntity> bookingEntyList = bookingDtlsRepository.findByIdAndDate(userEntity, bookingDate);
+		List<BookingDetails> bookingVOList = new ArrayList<BookingDetails>();
+		
+		for (BookingDetailsEntity entity : bookingEntyList) {
+			BookingDetails bookingVO = new BookingDetails();
+			UserDetailsEntity patientEntity = entity.getPatientId();
+			UserDetailsEntity doctorEntity = entity.getDoctorId();
+
+			bookingVO.setBookingId(entity.getBookingId());
+			bookingVO.setBookedDate(entity.getBookedDate());
+			bookingVO.setBookedTime(entity.getBookedTime());
+			bookingVO.setDoctorId(doctorEntity.getUserId());
+			bookingVO.setDoctorName(entity.getDoctorId().getFirstName() + " " + entity.getDoctorId().getLastName());
+			bookingVO.setTreatmentType(entity.getTreatmentType());
+			bookingVO.setPurpose(entity.getPurpose());
+			bookingVO.setPatientId(patientEntity.getUserId());
+			bookingVO.setPatientName(entity.getPatientId().getFirstName() + " " + entity.getPatientId().getLastName());
+			bookingVO.setIsTreatmentCompleted(entity.getIsTreatmentCompleted());
+			bookingVO.setPrescription(entity.getPrescription());
+			bookingVOList.add(bookingVO);
+		}
+		return bookingVOList;
 	}
 
 	@Override
@@ -109,9 +133,29 @@ public class BookingServiceImpl implements BookingService {
 	}
 
 	@Override
-	public BookingDetails getAppointmentDetailsByDate(String bookingDate) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<BookingDetails> getAppointmentDetailsByDate(String bookingDate) {
+		
+		List<BookingDetailsEntity> bookingEntyList = bookingDtlsRepository.findBybookedDate(bookingDate);
+		List<BookingDetails> bookingVOList = new ArrayList<BookingDetails>();
+		for (BookingDetailsEntity entity : bookingEntyList) {
+			BookingDetails bookingVO = new BookingDetails();
+			UserDetailsEntity patientEntity = entity.getPatientId();
+			UserDetailsEntity doctorEntity = entity.getDoctorId();
+
+			bookingVO.setBookingId(entity.getBookingId());
+			bookingVO.setBookedDate(entity.getBookedDate());
+			bookingVO.setBookedTime(entity.getBookedTime());
+			bookingVO.setDoctorId(doctorEntity.getUserId());
+			bookingVO.setDoctorName(entity.getDoctorId().getFirstName() + " " + entity.getDoctorId().getLastName());
+			bookingVO.setTreatmentType(entity.getTreatmentType());
+			bookingVO.setPurpose(entity.getPurpose());
+			bookingVO.setPatientId(patientEntity.getUserId());
+			bookingVO.setPatientName(entity.getPatientId().getFirstName() + " " + entity.getPatientId().getLastName());
+			bookingVO.setIsTreatmentCompleted(entity.getIsTreatmentCompleted());
+			bookingVO.setPrescription(entity.getPrescription());
+			bookingVOList.add(bookingVO);
+		}
+		return bookingVOList;
 	}
 
 }

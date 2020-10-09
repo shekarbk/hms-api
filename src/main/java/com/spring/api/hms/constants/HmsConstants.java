@@ -7,5 +7,6 @@ public class HmsConstants {
 	public final static String DELETE_MESSAGE = "details deleted successfully !!!";
 	public final static String STATUS_SUCCESS = "success";
 	public final static String STATUS_FAILED = "failure";
+	public final static String NO_RECORDS_FOUND = "no records found !!!";
 
 }

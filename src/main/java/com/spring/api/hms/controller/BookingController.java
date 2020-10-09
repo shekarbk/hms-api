@@ -1,5 +1,7 @@
 package com.spring.api.hms.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,4 +57,24 @@ public class BookingController {
 		return new Response<BookingDetails>(HmsConstants.STATUS_SUCCESS, HmsConstants.DELETE_MESSAGE, null);
 	}
 
+	@GetMapping("/date/{bookingDate}/doctorId/{doctorId}")
+	public Response<List<BookingDetails>> getBookingDetailsByDoctorIdAndDate(@PathVariable String bookingDate,
+			@PathVariable int doctorId) {
+		List<BookingDetails> bookingDtls = bookingService.getBookingDetailsByIdAndDate(doctorId, bookingDate);
+		if (bookingDtls.isEmpty()) {
+			return new Response<List<BookingDetails>>(HmsConstants.STATUS_FAILED, HmsConstants.NO_RECORDS_FOUND, null);
+		}
+
+		return new Response<List<BookingDetails>>(HmsConstants.STATUS_SUCCESS, null, bookingDtls);
+	}
+
+	@GetMapping("/date/{bookingDate}")
+	public Response<List<BookingDetails>> getAppointmentDetailsByDate(@PathVariable String bookingDate) {
+		List<BookingDetails> bookingDtls = bookingService.getAppointmentDetailsByDate(bookingDate);
+		if (bookingDtls.isEmpty()) {
+			return new Response<List<BookingDetails>>(HmsConstants.STATUS_FAILED, HmsConstants.NO_RECORDS_FOUND, null);
+		}
+
+		return new Response<List<BookingDetails>>(HmsConstants.STATUS_SUCCESS, null, bookingDtls);
+	}
 }

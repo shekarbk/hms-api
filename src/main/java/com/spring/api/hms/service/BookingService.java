@@ -10,7 +10,7 @@ import com.spring.api.hms.model.BookingDetails;
 @Service
 public interface BookingService {
 
-	List<BookingDetails> getBookingDetails(String userId, String bookingDate);
+	List<BookingDetails> getBookingDetailsByIdAndDate(int doctorId, String bookingDate);
 
 	void createNewBooking(BookingDetails bookingDetails);
 
@@ -20,6 +20,6 @@ public interface BookingService {
 
 	void updateBookingDetails(BookingDetails bookingDetails) throws NoRecordFoundException;
 
-	BookingDetails getAppointmentDetailsByDate(String bookingDate);
+	List<BookingDetails> getAppointmentDetailsByDate(String bookingDate);
 
 }
