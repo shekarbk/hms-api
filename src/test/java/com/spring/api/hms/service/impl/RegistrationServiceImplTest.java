@@ -15,6 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import com.spring.api.hms.entity.RoleDetailsEntity;
 import com.spring.api.hms.entity.UserDetailsEntity;
+import com.spring.api.hms.enums.GenderEnum;
 import com.spring.api.hms.enums.RoleEnum;
 import com.spring.api.hms.model.Registration;
 import com.spring.api.hms.repository.RoleDetailsRepository;
@@ -57,6 +58,17 @@ public class RegistrationServiceImplTest {
 	@Test
 	public void testGetAllRegistrationDetailsByRole() throws Exception {
 		List<RoleDetailsEntity> roleDtlsEntityList = new ArrayList<>();
+		UserDetailsEntity userDtlsObj = new UserDetailsEntity();
+		userDtlsObj.setAddress("address");
+		userDtlsObj.setFirstName("firstName");
+		userDtlsObj.setLastName("lastName");
+		userDtlsObj.setSex(GenderEnum.MALE);
+		userDtlsObj.setExistingDiseases("existingDiseases");
+		
+		RoleDetailsEntity roleDetailsEntity = new RoleDetailsEntity();
+		roleDetailsEntity.setUserDetails(userDtlsObj);
+		roleDtlsEntityList.add(roleDetailsEntity);
+		
 		Mockito.when(roleDetailsRepository.findAllByRole(RoleEnum.ADMIN)).thenReturn(roleDtlsEntityList);
 		registrationService.getAllRegistrationDetailsByRole(RoleEnum.ADMIN);
 

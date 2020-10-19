@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import com.spring.api.hms.entity.BookingDetailsEntity;
 import com.spring.api.hms.entity.UserDetailsEntity;
@@ -87,11 +88,21 @@ public class BookingServiceImplTest {
 
 	@Test
 	public void testDeleteBookingWithExpectedException() throws NoRecordFoundException {
-		Assertions.assertThrows(NoRecordFoundException.class, () -> {
-			Mockito.doNothing().when(bookingDetailsRepository).deleteById(Mockito.anyInt());
-			BookingServiceImpl.deleteBooking(0);
-			Mockito.verify(bookingDetailsRepository).deleteById(Mockito.anyInt());
-		});
+		Mockito.doNothing().when(bookingDetailsRepository).deleteById(Mockito.anyInt());
+		Exception exception = Assertions.assertThrows(NoRecordFoundException.class,
+				() -> BookingServiceImpl.deleteBooking(0));
+		Assertions.assertTrue(exception.getClass().equals(NoRecordFoundException.class));
+	}
+
+	@Test
+	public void testDeleteBookingWithEmptyResultExcpetion() {
+		Mockito.doThrow(EmptyResultDataAccessException.class).when(bookingDetailsRepository)
+				.deleteById(Mockito.anyInt());
+		Exception exception = Assertions.assertThrows(NoRecordFoundException.class,
+				() -> BookingServiceImpl.deleteBooking(1));
+		Assertions.assertTrue(exception.getClass().equals(NoRecordFoundException.class));
+		Mockito.verify(bookingDetailsRepository).deleteById(Mockito.anyInt());
+
 	}
 
 	@Test
@@ -166,7 +177,7 @@ public class BookingServiceImplTest {
 			Mockito.verify(bookingDetailsRepository).save(Mockito.any(BookingDetailsEntity.class));
 		});
 	}
-	
+
 	@Test
 	public void testGetAppointmentDetailsByDate() {
 		BookingDetailsEntity bookingDetailsEntity = new BookingDetailsEntity();
@@ -180,16 +191,16 @@ public class BookingServiceImplTest {
 
 		List<BookingDetailsEntity> bookingEntyList = new ArrayList<BookingDetailsEntity>();
 		bookingEntyList.add(bookingDetailsEntity);
-		
+
 		Mockito.when(bookingDetailsRepository.findBybookedDate(Mockito.anyString())).thenReturn(bookingEntyList);
-		
+
 		List<BookingDetails> bookingVOList = new ArrayList<BookingDetails>();
 		BookingDetails bookingDetails = new BookingDetails();
 		bookingVOList.add(bookingDetails);
-		
+
 		BookingServiceImpl.getAppointmentDetailsByDate("10-10-2010");
 		Mockito.verify(bookingDetailsRepository).findBybookedDate(Mockito.anyString());
-		
+
 		assertEquals(1, bookingVOList.size());
 	}
 }

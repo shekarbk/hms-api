@@ -84,7 +84,6 @@ public class RegistrationControllerTest {
 
 		given(registrationServiceMock.getAllRegistrationDetailsByRole(RoleEnum.ADMIN)).willReturn(registrationList);
 		this.mockMvc.perform(get("/v1/hms/registration/role/{role}", RoleEnum.ADMIN)).andExpect(status().isOk());
-//		.andExpect(jsonPath("$.role", is(registrationDtls.getRole())));
 		
 		Mockito.verify(registrationServiceMock).getAllRegistrationDetailsByRole(RoleEnum.ADMIN);
 	}
@@ -104,7 +103,6 @@ public class RegistrationControllerTest {
 		.andExpect(status().is(200)).andExpect(content().string("details updated successfully !!!"));
 
 		Mockito.verify(registrationServiceMock).updateRegistrationDetails(Mockito.any(Registration.class));
-
 	}
 
 }
