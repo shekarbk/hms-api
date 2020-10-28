@@ -41,9 +41,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	public List<Registration> getAllRegistrationDetailsByRole(RoleEnum role) {
 		List<RoleDetailsEntity> roleDtlsEntityList = roleDetailsRepository.findAllByRole(role);
-		List<Registration> registrationList = null;
+		List<Registration> registrationList = new ArrayList<>();
 		for (RoleDetailsEntity roleDtlsEntity : roleDtlsEntityList) {
-			registrationList = new ArrayList<>();
 			Registration registration = new Registration();
 			registration.setEmail(roleDtlsEntity.getEmail());
 			registration.setPassword(roleDtlsEntity.getPassword());

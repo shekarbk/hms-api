@@ -10,11 +10,12 @@ public class ContactDetails {
 	
 	private int contactId;
 	private String name;
-	private int phoneNumber;
+	private String countryCode;
+	private String phoneNumber;
 	private String email;
 	private String address;
-	private boolean isBranch;
-	private boolean isSubBranch;
-	private boolean isHeadOffice;
+	private String branch;
+	private String subBranch;
+	private String headOffice;
 
 }
