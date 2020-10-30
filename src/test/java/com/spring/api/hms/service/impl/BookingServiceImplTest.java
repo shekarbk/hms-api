@@ -152,7 +152,7 @@ public class BookingServiceImplTest {
 
 	@Test
 	public void testUpdateBookingDetailsWithExpectedException() {
-		Assertions.assertThrows(NoRecordFoundException.class, () -> {
+		Exception exception = Assertions.assertThrows(NoRecordFoundException.class, () -> {
 			Mockito.when(userDetailsRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
 
 			BookingDetailsEntity bookingDetailsEntity = new BookingDetailsEntity();
@@ -174,8 +174,8 @@ public class BookingServiceImplTest {
 			BookingDetails bookingDetails = new BookingDetails();
 			BookingServiceImpl.updateBookingDetails(bookingDetails);
 
-			Mockito.verify(bookingDetailsRepository).save(Mockito.any(BookingDetailsEntity.class));
 		});
+		Assertions.assertTrue(exception.getClass().equals(NoRecordFoundException.class));
 	}
 
 	@Test
