@@ -17,7 +17,7 @@ import com.spring.api.hms.entity.RoleDetailsEntity;
 import com.spring.api.hms.entity.UserDetailsEntity;
 import com.spring.api.hms.enums.GenderEnum;
 import com.spring.api.hms.enums.RoleEnum;
-import com.spring.api.hms.model.Registration;
+import com.spring.api.hms.model.RegistrationDetails;
 import com.spring.api.hms.repository.RoleDetailsRepository;
 import com.spring.api.hms.repository.UserDetailsRepository;
 
@@ -40,7 +40,7 @@ public class RegistrationServiceImplTest {
 
 	@Test
 	public void testSaveRegistrationDetails() throws Exception {
-		Registration registration = new Registration();
+		RegistrationDetails registration = new RegistrationDetails();
 
 		UserDetailsEntity userDtlsObj = new UserDetailsEntity();
 		RoleDetailsEntity roleDtlsObj = new RoleDetailsEntity();
@@ -94,7 +94,7 @@ public class RegistrationServiceImplTest {
 		UserDetailsEntity userDtlsObj = new UserDetailsEntity();
 		userDtlsObj.setRoleDetails(roleDtlsEntity);
 
-		Registration registration = new Registration();
+		RegistrationDetails registration = new RegistrationDetails();
 
 		Mockito.when(userDetailsRepository.findById(Mockito.any(Integer.class))).thenReturn(Optional.of(userDtlsObj));
 

@@ -15,7 +15,7 @@ public interface RoleDetailsRepository extends JpaRepository<RoleDetailsEntity, 
 
 	List<RoleDetailsEntity> findAllByRole(RoleEnum role);
 
-	@Query("select r from RoleDetailsEntity r where r.email like %?1 and r.password like %?2 and role like %?3")
+	@Query("select r from RoleDetailsEntity r where r.email like %?1 and r.password like %?2 and r.role = ?3")
 	RoleDetailsEntity findByUserDetails(String email, String password, RoleEnum role);
 
 }

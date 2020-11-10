@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class Registration {
+public class RegistrationDetails {
 	private int registrationId;
 	private String firstName;
 	private String lastName;
