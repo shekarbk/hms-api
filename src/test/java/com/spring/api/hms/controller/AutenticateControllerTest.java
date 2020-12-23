@@ -48,7 +48,7 @@ public class AutenticateControllerTest {
 		Response<BookingDetails> response = new Response<BookingDetails>(HmsConstants.STATUS_SUCCESS, null, null);
 		
 		this.mockMvc
-		.perform(post("/v1/hms/authenticate").contentType(MediaType.APPLICATION_JSON)
+		.perform(post("/v1/hms/authenticate").header("Content-Type", MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(profile)))
 		.andExpect(status().is(200)).andExpect(jsonPath("$.status", is(response.getStatus())));
 		

@@ -28,8 +28,10 @@ public class RegistrationController {
 
 	@PostMapping
 	public Response<RegistrationDetails> addNewRegistration(@RequestBody RegistrationDetails registration) {
-		registrationService.saveRegistrationDetails(registration);
-		return new Response<RegistrationDetails>(HmsConstants.STATUS_SUCCESS, HmsConstants.SUCCESS_MESSAGE, null);
+		int registrationId = registrationService.saveRegistrationDetails(registration);
+		RegistrationDetails registrationDetails = new RegistrationDetails();
+		registrationDetails.setRegistrationId(registrationId);
+		return new Response<RegistrationDetails>(HmsConstants.STATUS_SUCCESS, HmsConstants.SUCCESS_MESSAGE, registrationDetails);
 	}
 
 	@GetMapping("/email/{email}")

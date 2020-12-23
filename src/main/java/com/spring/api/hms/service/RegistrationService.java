@@ -7,7 +7,7 @@ import com.spring.api.hms.exception.NoRecordFoundException;
 import com.spring.api.hms.model.RegistrationDetails;
 
 public interface RegistrationService {
-	public void saveRegistrationDetails(RegistrationDetails registration);
+	public int saveRegistrationDetails(RegistrationDetails registration);
 
 	public List<RegistrationDetails> getAllRegistrationDetailsByRole(RoleEnum role);
 

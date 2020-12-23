@@ -81,8 +81,10 @@ public class BookingControllerTest {
 		Mockito.doThrow(NoRecordFoundException.class).when(bookingServiceMock)
 				.updateBookingDetails(Mockito.any(BookingDetails.class));
 		Response<BookingDetails> response = new Response<BookingDetails>(HmsConstants.STATUS_FAILED, null, null);
-		this.mockMvc.perform(put("/v1/hms/booking").contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(bookingDtls))).andExpect(jsonPath("$.status", is(response.getStatus())));
+		this.mockMvc
+				.perform(put("/v1/hms/booking").contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(bookingDtls)))
+				.andExpect(jsonPath("$.status", is(response.getStatus())));
 	}
 
 	@Test
@@ -103,15 +105,39 @@ public class BookingControllerTest {
 	}
 
 //	TODO: need to fix below test case mock issue
-//	@Test
-//	public void TestGetBookingDetailsByDoctorIdAndDate() throws Exception {
-//		String bookingDate = "10-10-2020";
-//		int doctorId = 1;
+	@Test
+	public void testGetBookingDetailsByDoctorIdAndDate() throws Exception {
+		String bookingDate = "10-10-2020";
+		int doctorId = 2;
+		List<BookingDetails> bookingDtlsList = new ArrayList<BookingDetails>();
+		BookingDetails bookingDetails = new BookingDetails();
+		bookingDtlsList.add(bookingDetails);
+		Response<List<BookingDetails>> response = new Response<List<BookingDetails>>(HmsConstants.STATUS_SUCCESS, null,
+				bookingDtlsList);
+
 //		Mockito.when(bookingServiceMock.getBookingDetailsByIdAndDate(Mockito.anyInt(),Mockito.anyString()))
-//				.thenReturn(Mockito.anyList());
-//		this.mockMvc.perform(get("/v1/hms/booking/date/{bookingDate}/doctorId/{doctorId}", bookingDate, doctorId))
-//				.andExpect(status().isOk());
-//	}
+//				.thenReturn(Mockito.<BookingDetails>anyList());
+
+		Mockito.when(bookingServiceMock.getBookingDetailsByIdAndDate(Mockito.anyInt(), Mockito.anyString()))
+				.thenReturn(bookingDtlsList);
+		this.mockMvc.perform(get("/v1/hms/booking/date/{bookingDate}/doctorId/{doctorId}", bookingDate, doctorId))
+				.andExpect(jsonPath("$.status", is(response.getStatus())));
+	}
+
+	@Test
+	public void testGetBookingDetailsByDoctorIdAndDateWithException() throws Exception {
+		String bookingDate = "10-10-2021";
+		int doctorId = 1;
+		List<BookingDetails> bookingDtlsList = new ArrayList<BookingDetails>();
+		Response<List<BookingDetails>> response = new Response<List<BookingDetails>>(HmsConstants.STATUS_FAILED, null,
+				bookingDtlsList);
+
+		Mockito.when(bookingServiceMock.getBookingDetailsByIdAndDate(Mockito.anyInt(), Mockito.anyString()))
+				.thenReturn(bookingDtlsList);
+		this.mockMvc.perform(get("/v1/hms/booking/date/{bookingDate}/doctorId/{doctorId}", bookingDate, doctorId))
+				.andExpect(jsonPath("$.status", is(response.getStatus())));
+
+	}
 
 	@Test
 	public void testGetAppointmentDetailsByDateWithExpectedException() throws Exception {

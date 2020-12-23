@@ -26,7 +26,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	@Autowired
 	RoleDetailsRepository roleDetailsRepository;
 
-	public void saveRegistrationDetails(RegistrationDetails registration) {
+	public int saveRegistrationDetails(RegistrationDetails registration) {
 
 		UserDetailsEntity userDtls = new UserDetailsEntity(registration.getFirstName(), registration.getLastName(),
 				registration.getGender(), registration.getAge(), registration.getAddress(),
@@ -37,8 +37,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 				registration.getRole());
 
 		roleDtls.setUserDetails(userDtls);
-		userDetailsRepository.save(userDtls);
+		userDtls = userDetailsRepository.save(userDtls);
 		roleDetailsRepository.save(roleDtls);
+		return userDtls.getUserId();
 	}
 
 	public List<RegistrationDetails> getAllRegistrationDetailsByRole(RoleEnum role) {
@@ -63,6 +64,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	public RegistrationDetails getSpecificRegistraionDetailsByEmail(String email) {
 		RoleDetailsEntity roleDtlsEntity = roleDetailsRepository.findByEmail(email);
 		RegistrationDetails registration = new RegistrationDetails();
+		registration.setRegistrationId(roleDtlsEntity.getUserDetails().getUserId());
 		registration.setEmail(roleDtlsEntity.getEmail());
 		registration.setPassword(roleDtlsEntity.getPassword());
 		registration.setRole(roleDtlsEntity.getRole());
