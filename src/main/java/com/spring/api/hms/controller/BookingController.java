@@ -26,9 +26,10 @@ public class BookingController {
 	BookingService bookingService;
 
 	@PostMapping
-	public String CreateNewBooking(@RequestBody BookingDetails bookingDtls) {
-		bookingService.createNewBooking(bookingDtls);
-		return HmsConstants.SUCCESS_MESSAGE;
+	public Response<BookingDetails> CreateNewBooking(@RequestBody BookingDetails bookingDtls) {
+		int bookingId = bookingService.createNewBooking(bookingDtls);
+		bookingDtls.setBookingId(bookingId);
+		return new Response<BookingDetails>(HmsConstants.STATUS_SUCCESS, HmsConstants.STATUS_SUCCESS, bookingDtls);
 	}
 
 	@GetMapping("/{bookingId}")
@@ -77,4 +78,14 @@ public class BookingController {
 
 		return new Response<List<BookingDetails>>(HmsConstants.STATUS_SUCCESS, null, bookingDtls);
 	}
+
+	@GetMapping("/")
+	public Response<List<BookingDetails>> getAllBookingDetails() {
+		List<BookingDetails> bookingDtls = bookingService.getAllBookingDetails();
+		if (bookingDtls.isEmpty()) {
+			return new Response<List<BookingDetails>>(HmsConstants.STATUS_FAILED, HmsConstants.NO_RECORDS_FOUND, null);
+		}
+		return new Response<List<BookingDetails>>(HmsConstants.STATUS_SUCCESS, null, bookingDtls);
+	}
+//TODO getAllbookingDetails()
 }

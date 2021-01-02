@@ -28,12 +28,12 @@ public class BookingServiceImpl implements BookingService {
 
 	@Override
 	public List<BookingDetails> getBookingDetailsByIdAndDate(int doctorId, String bookingDate) {
-		
+
 		UserDetailsEntity userEntity = new UserDetailsEntity();
 		userEntity.setUserId(doctorId);
 		List<BookingDetailsEntity> bookingEntyList = bookingDtlsRepository.findByIdAndDate(userEntity, bookingDate);
 		List<BookingDetails> bookingVOList = new ArrayList<BookingDetails>();
-		
+
 		for (BookingDetailsEntity entity : bookingEntyList) {
 			BookingDetails bookingVO = new BookingDetails();
 			UserDetailsEntity patientEntity = entity.getPatientId();
@@ -56,7 +56,7 @@ public class BookingServiceImpl implements BookingService {
 	}
 
 	@Override
-	public void createNewBooking(BookingDetails bookingDetails) {
+	public int createNewBooking(BookingDetails bookingDetails) {
 
 		Optional<UserDetailsEntity> patientObj = userDetailsRepository.findById(bookingDetails.getPatientId());
 		Optional<UserDetailsEntity> doctorObj = userDetailsRepository.findById(bookingDetails.getDoctorId());
@@ -65,7 +65,8 @@ public class BookingServiceImpl implements BookingService {
 				bookingDetails.getBookedTime(), bookingDetails.getTreatmentType(), bookingDetails.getPurpose(),
 				bookingDetails.getIsTreatmentCompleted(), bookingDetails.getPrescription(), patientObj.get(),
 				doctorObj.get());
-		bookingDtlsRepository.save(bookingEnty);
+		bookingEnty = bookingDtlsRepository.save(bookingEnty);
+		return bookingEnty.getBookingId();
 	}
 
 	@Override
@@ -134,7 +135,7 @@ public class BookingServiceImpl implements BookingService {
 
 	@Override
 	public List<BookingDetails> getAppointmentDetailsByDate(String bookingDate) {
-		
+
 		List<BookingDetailsEntity> bookingEntyList = bookingDtlsRepository.findBybookedDate(bookingDate);
 		List<BookingDetails> bookingVOList = new ArrayList<BookingDetails>();
 		for (BookingDetailsEntity entity : bookingEntyList) {
@@ -158,4 +159,31 @@ public class BookingServiceImpl implements BookingService {
 		return bookingVOList;
 	}
 
+	@Override
+	public List<BookingDetails> getAllBookingDetails() {
+		List<BookingDetailsEntity> bookingEntyList = bookingDtlsRepository.findAll();
+		List<BookingDetails> bookingVOList = new ArrayList<BookingDetails>();
+		for (BookingDetailsEntity entity : bookingEntyList) {
+			BookingDetails bookingVO = new BookingDetails();
+			UserDetailsEntity patientEntity = entity.getPatientId();
+			UserDetailsEntity doctorEntity = entity.getDoctorId();
+
+			bookingVO.setBookingId(entity.getBookingId());
+			bookingVO.setBookedDate(entity.getBookedDate());
+			bookingVO.setBookedTime(entity.getBookedTime());
+			bookingVO.setDoctorId(doctorEntity.getUserId());
+			bookingVO.setDoctorName(entity.getDoctorId().getFirstName() + " " + entity.getDoctorId().getLastName());
+			bookingVO.setTreatmentType(entity.getTreatmentType());
+			bookingVO.setPurpose(entity.getPurpose());
+			bookingVO.setPatientId(patientEntity.getUserId());
+			bookingVO.setPatientName(entity.getPatientId().getFirstName() + " " + entity.getPatientId().getLastName());
+			bookingVO.setIsTreatmentCompleted(entity.getIsTreatmentCompleted());
+			bookingVO.setPrescription(entity.getPrescription());
+			bookingVOList.add(bookingVO);
+		}
+		return bookingVOList;
+
+	}
+
+	//TODO getAllbookingDetails()
 }

@@ -1,5 +1,6 @@
 package com.spring.api.hms.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,15 +32,17 @@ public class RegistrationController {
 		int registrationId = registrationService.saveRegistrationDetails(registration);
 		RegistrationDetails registrationDetails = new RegistrationDetails();
 		registrationDetails.setRegistrationId(registrationId);
-		return new Response<RegistrationDetails>(HmsConstants.STATUS_SUCCESS, HmsConstants.SUCCESS_MESSAGE, registrationDetails);
+		return new Response<RegistrationDetails>(HmsConstants.STATUS_SUCCESS, HmsConstants.SUCCESS_MESSAGE,
+				registrationDetails);
 	}
 
 	@GetMapping("/email/{email}")
-	public Response<RegistrationDetails> getRegistrationDetailsByEmail(@PathVariable("email") String email) {
+	public Response<List<RegistrationDetails>> getRegistrationDetailsByEmail(@PathVariable("email") String email) {
 		RegistrationDetails registrationDtls = registrationService.getSpecificRegistraionDetailsByEmail(email);
-		return new Response<RegistrationDetails>(HmsConstants.STATUS_SUCCESS, HmsConstants.SUCCESS_FETCH_MESSAGE,
-				registrationDtls);
-
+		List<RegistrationDetails> registrationList = new ArrayList<RegistrationDetails>();
+		registrationList.add(registrationDtls);
+		return new Response<List<RegistrationDetails>>(HmsConstants.STATUS_SUCCESS, HmsConstants.SUCCESS_FETCH_MESSAGE,
+				registrationList);
 	}
 
 	@GetMapping("/role/{role}")
@@ -70,7 +73,7 @@ public class RegistrationController {
 		return new Response<RegistrationDetails>(HmsConstants.STATUS_SUCCESS, HmsConstants.SUCCESS_FETCH_MESSAGE,
 				registrationDtls);
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public Response<RegistrationDetails> deleteProfile(@PathVariable("id") int id) {
 		try {
@@ -80,4 +83,24 @@ public class RegistrationController {
 		}
 		return new Response<RegistrationDetails>(HmsConstants.STATUS_SUCCESS, HmsConstants.DELETE_MESSAGE, null);
 	}
+
+	@GetMapping("/specialization/{specialization}")
+	public Response<List<RegistrationDetails>> getSpecialization(
+			@PathVariable("specialization") String specializationCriteria) {
+		List<RegistrationDetails> registrationList = null;
+		try {
+			registrationList = registrationService.getSpecialization(specializationCriteria);
+		} catch (NoRecordFoundException e) {
+			return new Response<List<RegistrationDetails>>(HmsConstants.STATUS_FAILED, HmsConstants.NO_RECORDS_FOUND,
+					null);
+		}
+
+		if (registrationList.isEmpty()) {
+			return new Response<List<RegistrationDetails>>(HmsConstants.STATUS_FAILED, HmsConstants.NO_RECORDS_FOUND,
+					registrationList);
+		}
+		return new Response<List<RegistrationDetails>>(HmsConstants.STATUS_SUCCESS, HmsConstants.SUCCESS_MESSAGE,
+				registrationList);
+	}
+		
 }

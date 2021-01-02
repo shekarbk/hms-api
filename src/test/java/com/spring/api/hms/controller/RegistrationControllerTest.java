@@ -52,7 +52,7 @@ public class RegistrationControllerTest {
 		registrationDtls.setPassword("test123");
 		registrationDtls.setLastName("bk");
 
-		Mockito.doNothing().when(registrationServiceMock).saveRegistrationDetails(registrationDtls);
+		Mockito.when(registrationServiceMock.saveRegistrationDetails(registrationDtls)).thenReturn(Mockito.anyInt());
 		Response<RegistrationDetails> response = new Response<RegistrationDetails>(HmsConstants.STATUS_SUCCESS,
 				HmsConstants.SUCCESS_MESSAGE, null);
 		this.mockMvc

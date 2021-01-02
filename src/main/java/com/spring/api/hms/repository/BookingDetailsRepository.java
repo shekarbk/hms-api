@@ -16,4 +16,5 @@ public interface BookingDetailsRepository extends JpaRepository<BookingDetailsEn
 	List<BookingDetailsEntity> findByIdAndDate(UserDetailsEntity doctorId, String bookingDate);
 
 	List<BookingDetailsEntity> findBybookedDate(String bookingDate);
+	
 }

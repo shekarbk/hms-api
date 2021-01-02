@@ -1,7 +1,8 @@
 package com.spring.api.hms.enums;
 
 public enum TreatmentTypeEnum {
-	GENERAL_PHYSICAN,
+	PHYSICIAN,
 	ENT,
-	EYE_SPECIALIST
+	EYE_SPECIALIST,
+	DENTAL
 }

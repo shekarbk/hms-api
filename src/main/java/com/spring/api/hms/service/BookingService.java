@@ -9,7 +9,7 @@ public interface BookingService {
 
 	List<BookingDetails> getBookingDetailsByIdAndDate(int doctorId, String bookingDate);
 
-	void createNewBooking(BookingDetails bookingDetails);
+	int createNewBooking(BookingDetails bookingDetails);
 
 	String deleteBooking(int bookingId) throws NoRecordFoundException;
 
@@ -19,4 +19,5 @@ public interface BookingService {
 
 	List<BookingDetails> getAppointmentDetailsByDate(String bookingDate);
 	
+	List<BookingDetails> getAllBookingDetails();
 }

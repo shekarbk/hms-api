@@ -18,4 +18,6 @@ public interface RegistrationService {
 	public RegistrationDetails getRegistrationDetails(int id) throws NoRecordFoundException;
 	
 	public String deleteProfile(int id) throws NoRecordFoundException;
+	
+	public List<RegistrationDetails> getSpecialization(String specializationCriteria) throws NoRecordFoundException;
 }

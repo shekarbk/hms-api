@@ -50,11 +50,16 @@ public class RegistrationServiceImpl implements RegistrationService {
 			registration.setEmail(roleDtlsEntity.getEmail());
 			registration.setPassword(roleDtlsEntity.getPassword());
 			registration.setRole(roleDtlsEntity.getRole());
+			registration.setRegistrationId(roleDtlsEntity.getUserDetails().getUserId());
 			registration.setAddress(roleDtlsEntity.getUserDetails().getAddress());
 			registration.setFirstName(roleDtlsEntity.getUserDetails().getFirstName());
 			registration.setLastName(roleDtlsEntity.getUserDetails().getLastName());
+			registration.setAge(roleDtlsEntity.getUserDetails().getAge());
 			registration.setGender(roleDtlsEntity.getUserDetails().getSex());
 			registration.setExistingDiseases(roleDtlsEntity.getUserDetails().getExistingDiseases());
+			registration.setQualification(roleDtlsEntity.getUserDetails().getQualification());
+			registration.setSpecialization(roleDtlsEntity.getUserDetails().getSpecialization());
+			registration.setYearOfExp(roleDtlsEntity.getUserDetails().getYearOfExp());
 			registrationList.add(registration);
 		}
 
@@ -77,19 +82,22 @@ public class RegistrationServiceImpl implements RegistrationService {
 	}
 
 	public void updateRegistrationDetails(RegistrationDetails registration) {
-
 		Optional<UserDetailsEntity> userDtlsObject = userDetailsRepository.findById(registration.getRegistrationId());
 		if (userDtlsObject.isPresent()) {
 			UserDetailsEntity userDtls = userDtlsObject.get();
-
+			userDtls.setFirstName(registration.getFirstName());
+			userDtls.setLastName(registration.getLastName());
+			userDtls.setSex(registration.getGender());
 			userDtls.setAddress(registration.getAddress());
+			userDtls.setExistingDiseases(registration.getExistingDiseases());
+			userDtls.setQualification(registration.getQualification());
+			userDtls.setSpecialization(registration.getSpecialization());
 			RoleDetailsEntity roleDtlsEntity = userDtls.getRoleDetails();
 			roleDtlsEntity.setPassword(registration.getPassword());
-//			TODO remove this line if it works
-//			userDtls.setRoleDetails(roleDtlsEntity);
+			roleDtlsEntity.setEmail(registration.getEmail());
+			roleDtlsEntity.setRole(registration.getRole());
 			userDetailsRepository.save(userDtls);
 		}
-
 	}
 
 	@Override
@@ -127,6 +135,25 @@ public class RegistrationServiceImpl implements RegistrationService {
 			throw new NoRecordFoundException("No record found !!!");
 		}
 		return HmsConstants.DELETE_MESSAGE;
+	}
+
+	@Override
+	public List<RegistrationDetails> getSpecialization(String specializationCriteria) throws NoRecordFoundException {
+		List<RegistrationDetails> registrationList = new ArrayList<RegistrationDetails>();
+		try {
+			List<UserDetailsEntity> UserDetailsEntityList = userDetailsRepository
+					.getSpecailization(specializationCriteria);
+			for (UserDetailsEntity userDetailsEntity : UserDetailsEntityList) {
+				RegistrationDetails registration = new RegistrationDetails();
+				registration.setFirstName(userDetailsEntity.getFirstName());
+				registration.setLastName(userDetailsEntity.getLastName());
+				registration.setRegistrationId(userDetailsEntity.getUserId());
+				registrationList.add(registration);
+			}
+		} catch (Exception e) {
+			throw new NoRecordFoundException("No record found !!!");
+		}
+		return registrationList;
 	}
 
 }

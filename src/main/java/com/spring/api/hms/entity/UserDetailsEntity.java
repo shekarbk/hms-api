@@ -44,7 +44,7 @@ public class UserDetailsEntity {
 	private String specialization;
 	private String yearOfExp;
 
-	@OneToOne(mappedBy = "userDetails") // userDetails is a variable name present in RoleDetailsEntity class
+	@OneToOne(mappedBy = "userDetails",fetch = FetchType.LAZY, cascade = CascadeType.ALL) // userDetails is a variable name present in RoleDetailsEntity class
 	private RoleDetailsEntity roleDetails;
 	
 	@OneToMany(mappedBy = "patientId", fetch = FetchType.LAZY, cascade = CascadeType.ALL) //patientId is the variable name present in BookingDetailsEntity class

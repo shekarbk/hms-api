@@ -162,4 +162,10 @@ public class BookingControllerTest {
 		this.mockMvc.perform(get("/v1/hms/booking/date/{bookingDate}", bookingDate)).andExpect(status().isOk())
 				.andExpect(jsonPath("$.status", is(response.getStatus())));
 	}
+
+	@Test
+	public void testGetAllBookingDetails() throws Exception {
+		throw new RuntimeException("not yet implemented");
+	}
+	
 }
