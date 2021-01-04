@@ -87,5 +87,4 @@ public class BookingController {
 		}
 		return new Response<List<BookingDetails>>(HmsConstants.STATUS_SUCCESS, null, bookingDtls);
 	}
-//TODO getAllbookingDetails()
 }

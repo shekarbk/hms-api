@@ -203,4 +203,24 @@ public class BookingServiceImplTest {
 
 		assertEquals(1, bookingVOList.size());
 	}
+
+	@Test
+	public void testGetAllBookingDetails() {
+		BookingDetailsEntity bookingDetailsEntity = new BookingDetailsEntity();
+		UserDetailsEntity userDtlsObj1 = new UserDetailsEntity();
+		userDtlsObj1.setUserId(2);
+		bookingDetailsEntity.setDoctorId(userDtlsObj1);
+
+		UserDetailsEntity userDtlsObj2 = new UserDetailsEntity();
+		userDtlsObj2.setUserId(1);
+		bookingDetailsEntity.setPatientId(userDtlsObj2);
+
+		List<BookingDetailsEntity> bookingEntyList = new ArrayList<BookingDetailsEntity>();
+		bookingEntyList.add(bookingDetailsEntity);
+
+		Mockito.when(bookingDetailsRepository.findAll()).thenReturn(bookingEntyList);
+		BookingServiceImpl.getAllBookingDetails();
+		Mockito.verify(bookingDetailsRepository).findAll();
+		assertEquals(1, bookingEntyList.size());
+	}
 }

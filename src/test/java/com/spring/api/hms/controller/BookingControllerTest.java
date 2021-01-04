@@ -25,6 +25,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.api.hms.constants.HmsConstants;
+import com.spring.api.hms.enums.StatusEnum;
+import com.spring.api.hms.enums.TreatmentTypeEnum;
 import com.spring.api.hms.exception.NoRecordFoundException;
 import com.spring.api.hms.model.BookingDetails;
 import com.spring.api.hms.response.Response;
@@ -49,13 +51,26 @@ public class BookingControllerTest {
 
 	@Test
 	public void testCreateNewBooking() throws JsonProcessingException, Exception {
-		Mockito.doNothing().when(bookingServiceMock).createNewBooking(Mockito.any(BookingDetails.class));
+		Mockito.when(bookingServiceMock.createNewBooking(Mockito.any(BookingDetails.class)))
+				.thenReturn(Mockito.anyInt());
 		BookingDetails bookingDtls = new BookingDetails();
+		bookingDtls.setBookedDate("05-10-2020");
+		bookingDtls.setBookedTime("11:00");
+		bookingDtls.setDoctorId(1);
+		bookingDtls.setDoctorName("");
+		bookingDtls.setTreatmentType("checkup");
+		bookingDtls.setPurpose("cold&fever");
+		bookingDtls.setPatientId(1);
+		bookingDtls.setPatientName("");
+		bookingDtls.setIsTreatmentCompleted(StatusEnum.NOT_COMPLETED);
+		bookingDtls.setPrescription("");
+
+		Response<BookingDetails> response = new Response<BookingDetails>(HmsConstants.STATUS_SUCCESS, null, null);
 
 		this.mockMvc
 				.perform(post("/v1/hms/booking").contentType(MediaType.APPLICATION_JSON)
 						.content(objectMapper.writeValueAsString(bookingDtls)))
-				.andExpect(status().is(200)).andExpect(content().string(HmsConstants.SUCCESS_MESSAGE));
+				.andExpect(status().isOk()).andExpect(jsonPath("$.status", is(response.getStatus())));
 	}
 
 	@Test
@@ -136,7 +151,6 @@ public class BookingControllerTest {
 				.thenReturn(bookingDtlsList);
 		this.mockMvc.perform(get("/v1/hms/booking/date/{bookingDate}/doctorId/{doctorId}", bookingDate, doctorId))
 				.andExpect(jsonPath("$.status", is(response.getStatus())));
-
 	}
 
 	@Test
@@ -165,7 +179,14 @@ public class BookingControllerTest {
 
 	@Test
 	public void testGetAllBookingDetails() throws Exception {
-		throw new RuntimeException("not yet implemented");
+		List<BookingDetails> bookingDtls = new ArrayList<BookingDetails>();
+		BookingDetails bookingDetails = new BookingDetails();
+		bookingDtls.add(bookingDetails);
+		Response<List<BookingDetails>> response = new Response<List<BookingDetails>>(HmsConstants.STATUS_SUCCESS, null,
+				bookingDtls);
+		Mockito.when(bookingServiceMock.getAllBookingDetails()).thenReturn(bookingDtls);
+		this.mockMvc.perform(get("/v1/hms/booking/")).andExpect(status().isOk())
+				.andExpect(jsonPath("$.status", is(response.getStatus())));
 	}
-	
+
 }
