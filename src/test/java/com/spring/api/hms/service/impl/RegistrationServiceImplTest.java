@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.spring.api.hms.entity.RoleDetailsEntity;
 import com.spring.api.hms.entity.UserDetailsEntity;
@@ -22,7 +23,7 @@ import com.spring.api.hms.repository.RoleDetailsRepository;
 import com.spring.api.hms.repository.UserDetailsRepository;
 
 @RunWith(MockitoJUnitRunner.class)
-
+@ActiveProfiles("test")
 public class RegistrationServiceImplTest {
 	@Mock
 	UserDetailsRepository userDetailsRepository;

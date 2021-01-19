@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.spring.api.hms.entity.ContactDetailsEntity;
 import com.spring.api.hms.exception.NoRecordFoundException;
@@ -20,6 +21,7 @@ import com.spring.api.hms.model.ContactDetails;
 import com.spring.api.hms.repository.ContactDetailsRepository;
 
 @RunWith(MockitoJUnitRunner.class)
+@ActiveProfiles("test")
 public class ContactDetailsServiceImplTest {
 
 	@Mock

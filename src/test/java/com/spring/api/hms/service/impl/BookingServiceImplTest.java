@@ -16,6 +16,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.spring.api.hms.entity.BookingDetailsEntity;
 import com.spring.api.hms.entity.UserDetailsEntity;
@@ -25,6 +26,7 @@ import com.spring.api.hms.repository.BookingDetailsRepository;
 import com.spring.api.hms.repository.UserDetailsRepository;
 
 @RunWith(MockitoJUnitRunner.class)
+@ActiveProfiles("test")
 public class BookingServiceImplTest {
 
 	@Mock

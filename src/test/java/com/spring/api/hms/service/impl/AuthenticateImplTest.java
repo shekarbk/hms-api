@@ -8,12 +8,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.spring.api.hms.entity.RoleDetailsEntity;
 import com.spring.api.hms.enums.RoleEnum;
 import com.spring.api.hms.model.Profile;
 import com.spring.api.hms.repository.RoleDetailsRepository;
 
+@ActiveProfiles("test")
 public class AuthenticateImplTest {
 
 	@Mock

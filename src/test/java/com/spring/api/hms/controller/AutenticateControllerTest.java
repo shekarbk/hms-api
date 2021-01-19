@@ -25,7 +25,6 @@ import com.spring.api.hms.service.Authenticate;
 
 @WebMvcTest(controllers = AutenticateController.class)
 @ActiveProfiles("test")
-
 public class AutenticateControllerTest {
 
 	@Autowired
